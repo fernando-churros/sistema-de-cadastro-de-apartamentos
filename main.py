@@ -28,8 +28,7 @@ def main():
                 break
 
 def buscar_apto(search_apto):
-    with open("aptos.json", "r", encoding="utf-8") as arquivo:
-        aptos = json.load(arquivo)
+    aptos = carregar_dados()
 
     for apto in aptos:
         if apto.get('apto') == search_apto:
@@ -43,15 +42,13 @@ def cadastrar_apto(apto, nome, tel):
             'tel': tel
     }
 
-    with open("aptos.json", "r", encoding="utf-8") as arquivo:
-        dados = json.load(arquivo)
-
     is_exist = buscar_apto(apto)
     
     if not is_exist:
+        dados = carregar_dados()
         dados.append(morador)
-        with open("aptos.json", "w", encoding="utf-8") as arquivo:
-            json.dump(dados, arquivo)
+        salvar_dados(dados)
+
         return True
     else:
         return False
@@ -73,18 +70,23 @@ def excluir_apto(apto):
     deleted_apto = buscar_apto(apto)
 
     if deleted_apto:
-        with open('aptos.json', 'r') as arquivo:
-            dados = json.load(arquivo)
+        dados = carregar_dados()
     
         dados.remove(deleted_apto)
     
-        with open('aptos.json', 'w') as arquivo:
-            json.dump(dados, arquivo)
+        salvar_dados(dados)
 
         return True
     else:
         return False
 
+def carregar_dados():
+    with open('aptos.json', 'r', encoding='utf-8') as arquivo:
+        return json.load(arquivo)
+
+def salvar_dados(dados):
+    with open('aptos.json', 'w', encoding='utf-8') as arquivo:
+        json.dump(dados, arquivo, indent=4)
 
 if __name__ == '__main__':
     main()
