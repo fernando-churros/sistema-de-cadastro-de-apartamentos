@@ -1,4 +1,4 @@
-import json
+import json, os
 
 def main():
     while True:
@@ -88,5 +88,10 @@ def salvar_dados(dados):
     with open('aptos.json', 'w', encoding='utf-8') as arquivo:
         json.dump(dados, arquivo, indent=4)
 
+def criar_json():
+    if not os.path.exists('aptos.json'):
+        salvar_dados([])
+
 if __name__ == '__main__':
+    criar_json()
     main()
