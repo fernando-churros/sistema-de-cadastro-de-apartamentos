@@ -50,8 +50,8 @@ def buscar_apto(search_apto):
 def cadastrar_apto(apto, nome, tel):
     morador = {
             'apto': apto,
-            'nome': nome.title(),
-            'tel': f'({tel[:2]}) {tel[2]} {tel[3:7]}-{tel[7:]}'
+            'nome': nome
+            'tel': tel
         
     }
     
@@ -136,6 +136,13 @@ def validar_dados(el, dado_type):
             if el.isnumeric() and len(el) == 11:
                 return True
     return False
+
+def formatar_dado(el, dado_type):
+    match dado_type:
+        case 'nome':
+            return el.title()
+        case 'tel':
+            return f'({el[:2]}) {el[2]} {el[3:7]}-{el[7:]}'
 
 if __name__ == '__main__':
     criar_json()
