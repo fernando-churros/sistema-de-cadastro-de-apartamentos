@@ -25,7 +25,7 @@ def main():
             case 2:
                 is_exist_apto = buscar_apto(remover_spaces(input('Apto: ')))
                 if is_exist_apto:
-                    print(is_exist_apto)
+                    imprimir_dados(is_exist_apto)
                 else:
                     print('Morador não encontrado.')
             case 3:
@@ -50,7 +50,7 @@ def buscar_apto(search_apto):
 def cadastrar_apto(apto, nome, tel):
     morador = {
             'apto': apto,
-            'nome': nome
+            'nome': nome,
             'tel': tel
         
     }
@@ -143,6 +143,12 @@ def formatar_dado(el, dado_type):
             return el.title()
         case 'tel':
             return f'({el[:2]}) {el[2]} {el[3:7]}-{el[7:]}'
+        case _:
+            return el
+
+def imprimir_dados(el):
+    for x, y in el.items():
+        print(f'{x.upper()}: {formatar_dado(y, x)}')
 
 if __name__ == '__main__':
     criar_json()
