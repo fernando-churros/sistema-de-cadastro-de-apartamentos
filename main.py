@@ -5,14 +5,20 @@ def main():
         option = menu()
         match option:
             case 1:
-                apto = remover_spaces(input('Apto: '), 'nospace')
+                apto = remover_spaces(input('Apto: '))
                 nome = remover_spaces(input('Nome: '), 'nome')
-                tel = remover_spaces(input('Tel: '), 'nospace')
+                tel = remover_spaces(input('Tel: '))
+
+                is_valid_apto = validar_dados(apto, 'apto')
+                is_valid_nome = validar_dados(nome, 'nome')
+                is_valid_tel = validar_dados(tel, 'tel')
+
+                if not is_valid_apto or not is_valid_nome or not is_valid_tel:
+                    print('Dados inválidos.')
+                    continue
 
                 is_cadastred = cadastrar_apto(apto, nome, tel)
-                if is_cadastred == 'Dados inválidos.':
-                    print(is_cadastred)
-                elif is_cadastred:
+                if is_cadastred:
                     print('Morador cadastrado.')
                 else:
                     print('Morador já cadastrado.')
@@ -44,8 +50,8 @@ def buscar_apto(search_apto):
 def cadastrar_apto(apto, nome, tel):
     morador = {
             'apto': apto,
-            'nome': nome,
-            'tel': tel
+            'nome': nome.title(),
+            'tel': f'({tel[:2]}) {tel[2]} {tel[3:7]}-{tel[7:]}'
         
     }
     
@@ -98,7 +104,7 @@ def criar_json():
     if not os.path.exists('aptos.json'):
         salvar_dados([])
 
-def remover_spaces(el, tag='nome'):
+def remover_spaces(el, tag='nospace'):
     el = el.strip()
     el = el.split(' ')
     str_list = []
@@ -111,6 +117,25 @@ def remover_spaces(el, tag='nome'):
             return ' '.join(str_list) 
         case 'nospace':
             return ''.join(str_list)
+
+def validar_dados(el, dado_type):
+    primeiro_andar = 1
+    ultimo_andar = 6
+    qtd_quartos = 10
+
+    match dado_type:
+        case 'nome':
+            return el.replace(' ', '').isalpha()
+        case 'apto':
+            if el.isnumeric() and len(el) == 3:
+                andar = int(el[0])
+                quarto = int(el[1:])
+                if primeiro_andar <= andar <= ultimo_andar and 1 <= quarto <= qtd_quartos:
+                    return True
+        case 'tel':
+            if el.isnumeric() and len(el) == 11:
+                return True
+    return False
 
 if __name__ == '__main__':
     criar_json()
