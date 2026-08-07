@@ -19,24 +19,29 @@ def main():
 
                 is_cadastred = cadastrar_apto(apto, nome, tel)
                 if is_cadastred:
-                    print('Morador cadastrado.')
+                    print(f'Morador {apto} cadastrado.')
                 else:
-                    print('Morador já cadastrado.')
+                    print(f'Morador do {apto} já cadastrado.')
             case 2:
-                is_exist_apto = buscar_apto(remover_spaces(input('Apto: ')))
-                if is_exist_apto:
-                    imprimir_dados(is_exist_apto)
+                apto_search = remover_spaces(input('Apto: ')) 
+                _, apto_exist = buscar_apto(apto_search)
+                if apto_exist:
+                    imprimir_dados(apto_exist)
                 else:
-                    print('Morador não encontrado.')
+                    print(f'Morador {apto_search} não encontrado.')
             case 3:
-                is_exclude = excluir_apto(remover_spaces(input('Apto: ')))
+                is_exclude, apto_exclude = excluir_apto(remover_spaces(input('Apto: ')))
                 
                 if is_exclude:
-                    print('Morador excluido.')
+                    print(f'Morador do {apto_exclude} excluido.')
                 else:
-                    print('Morador não encontrado.')
+                    print(f'Morador {apto_exclude} não encontrado.')
             case 4:
-                listar_aptos()
+                dados = carregar_dados()
+                if dados:
+                    listar_aptos(dados)
+                else:
+                    print('Nenhum morador cadastrado.')
             case 5:
                 print('Programa encerrado.')
                 break
@@ -46,53 +51,50 @@ def buscar_apto(search_apto):
 
     for apto in aptos:
         if apto.get('apto') == search_apto:
-            return apto
-    return False
+            return aptos, apto
+    return aptos, False
 
 def cadastrar_apto(apto, nome, tel):
-    morador = {
-            'apto': apto,
-            'nome': nome,
-            'tel': tel
-        
-    }
-    
-    is_exist = buscar_apto(apto)
-    if not is_exist:
-        dados = carregar_dados()
+    dados, apto_exist = buscar_apto(apto)
+
+    if not apto_exist:
+        morador = {
+                'apto': apto,
+                'nome': nome,
+                'tel': tel
+        }
+
         dados.append(morador)
         salvar_dados(dados)
 
         return True
-    else:
-        return False 
+    return False
 
 def menu():
     while True:
         try:
             print('-' * 30)
-            option = int(input('1 - Cadastrar\n2 - Buscar\n3 - Excluir\n4 = Listar Aptos\n5 - Sair\n:'))
+            option = int(input('1 - Cadastrar\n2 - Buscar\n3 - Excluir\n4 - Listar Aptos\n5 - Sair\n:'))
             print('-' * 30)
 
             if 1 <= option <= 5:
                 return option
+            else:
+                print('Opção Inválida')
 
         except ValueError:
             print('Opção inválida.')
 
-def excluir_apto(apto):
-    deleted_apto = buscar_apto(apto)
+def excluir_apto(apto_search):
+    dados, apto = buscar_apto(apto_search)
 
-    if deleted_apto:
-        dados = carregar_dados()
-    
-        dados.remove(deleted_apto)
-    
+    if apto:
+        dados.remove(apto)
         salvar_dados(dados)
+    
+        return True, apto_search
 
-        return True
-    else:
-        return False
+    return False, apto_search
 
 def carregar_dados():
     with open('aptos.json', 'r', encoding='utf-8') as arquivo:
@@ -152,9 +154,7 @@ def imprimir_dados(el):
     for x, y in el.items():
         print(f'{x.upper()}: {formatar_dado(y, x)}')
 
-def listar_aptos():
-    dados = carregar_dados()
-    
+def listar_aptos(dados):
     aptos_list = []
     for x in dados:
         aptos_list.append(x.get('apto'))
