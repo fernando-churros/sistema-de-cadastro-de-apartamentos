@@ -36,6 +36,8 @@ def main():
                 else:
                     print('Morador não encontrado.')
             case 4:
+                listar_aptos()
+            case 5:
                 print('Programa encerrado.')
                 break
 
@@ -69,10 +71,10 @@ def menu():
     while True:
         try:
             print('-' * 30)
-            option = int(input('1 - Cadastrar\n2 - Buscar\n3 - Excluir\n4 - Sair\n:'))
+            option = int(input('1 - Cadastrar\n2 - Buscar\n3 - Excluir\n4 = Listar Aptos\n5 - Sair\n:'))
             print('-' * 30)
 
-            if 1 <= option <= 4:
+            if 1 <= option <= 5:
                 return option
 
         except ValueError:
@@ -149,6 +151,29 @@ def formatar_dado(el, dado_type):
 def imprimir_dados(el):
     for x, y in el.items():
         print(f'{x.upper()}: {formatar_dado(y, x)}')
+
+def listar_aptos():
+    dados = carregar_dados()
+    
+    aptos_list = []
+    for x in dados:
+        aptos_list.append(int(x.get('apto')))
+    aptos_list.sort()
+
+    if len(aptos_list) >= 5:
+        c = 0
+        for i, x in enumerate(aptos_list):
+            print(x, end=' ')
+            if c == 4:
+                print()
+                c = 0
+                continue
+            c += 1
+            if i == len(aptos_list) - 1:
+                print()
+    else:
+        for x in aptos_list:
+            print(x)
 
 if __name__ == '__main__':
     criar_json()
