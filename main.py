@@ -157,23 +157,16 @@ def listar_aptos():
     
     aptos_list = []
     for x in dados:
-        aptos_list.append(int(x.get('apto')))
+        aptos_list.append(x.get('apto'))
     aptos_list.sort()
 
-    if len(aptos_list) >= 5:
-        c = 0
-        for i, x in enumerate(aptos_list):
-            print(x, end=' ')
-            if c == 4:
-                print()
-                c = 0
-                continue
-            c += 1
-            if i == len(aptos_list) - 1:
-                print()
-    else:
-        for x in aptos_list:
-            print(x)
+    for i, x in enumerate(aptos_list):
+        print(x, end=' ')
+
+        if i == len(aptos_list) - 1:
+            print()
+        elif (i + 1) % 5 == 0:
+            print()
 
 if __name__ == '__main__':
     criar_json()
