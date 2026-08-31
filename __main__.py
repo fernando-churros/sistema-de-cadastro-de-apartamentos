@@ -1,8 +1,11 @@
-from Morador import *
+from Morador import Morador
 
 def main():
-    m1 = Morador('fernando    augusto   ', '102', '41987410667')
-    print(m1.__dict__)
+    try:
+        m1 = Morador('fernando', '102', '41987410667')
+        print(m1.__dict__)
+    except ValueError as erro:
+        print(erro)
 if __name__ == '__main__':
     main()
 
