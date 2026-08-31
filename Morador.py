@@ -14,7 +14,10 @@ class Morador:
         return self._nome
     @nome.setter
     def nome(self, valor):
-        nome = self.remover_espacos(valor, 'nome')
+        if not isinstance(valor, str):
+            raise TypeError('O nome deve ser um texto (str).')
+
+        nome = self.remover_espacos(valor, 'nome').title()
         if not nome.replace(' ', '').isalpha():
             raise ValueError('Nome inválido.')
         self._nome = nome
@@ -24,6 +27,9 @@ class Morador:
         return self._apto
     @apto.setter
     def apto(self, valor):
+        if not isinstance(valor, str):
+            raise TypeError('O apartamento deve ser informado como texto (str).')
+
         apto = self.remover_espacos(valor, 'nospaces')
         if not apto.isdigit() or len(apto) != self.APTO_VALIDO:
             raise ValueError('Apto inválido')
@@ -41,6 +47,9 @@ class Morador:
         return self._telefone
     @telefone.setter
     def telefone(self, valor):
+        if not isinstance(valor, str):
+            raise TypeError('O telefone deve ser informado como texto (str).')
+
         telefone = self.remover_espacos(valor, 'nospaces')
         if not telefone.isdigit() or len(telefone) != self.TAMANHO_TELEFONE:
             raise ValueError('Telefone inválido.')
