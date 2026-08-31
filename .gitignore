@@ -1,6 +1,7 @@
 .idea/
 .venv/
 __pycache__/
+GEMINI.md
 *.pyc
 aptos.json
 *.swp
