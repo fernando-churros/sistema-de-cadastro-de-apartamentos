@@ -66,4 +66,10 @@ class Morador:
             case _:
                 raise ValueError('Tipo inválido')
 
-    
+    @property
+    def ftelefone(self):
+        return f'({self.telefone[:2]}) {self.telefone[2]} {self.telefone[3:7]}-{self.telefone[7:]}'
+
+    def __str__(self):
+        return f'Nome: {self.nome}\nApartamento: {self.apto}\nTelefone: {self.ftelefone}'
+
